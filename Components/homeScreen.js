@@ -19,7 +19,7 @@ class HomeScreen extends React.Component {
         const authData = {
             email: this.state.email,
             password: this.state.password, 
-            returnSecureToken: true
+            returnSecureToken: true 
         }
 
         this.setState({loading: true});
@@ -28,8 +28,9 @@ class HomeScreen extends React.Component {
         .then(response => {
             this.setState({loading: false});
             console.log(response.data); 
-            Alert.alert("Success", "You Signed In");
-            
+            //Alert.alert("Success", "You Signed In");
+            this.props.navigation.navigate("Lists"); 
+
         })
         .catch(err => {
             this.setState({loading: false});

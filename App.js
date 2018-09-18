@@ -17,6 +17,7 @@ export default class App extends React.Component {
         headerMode: 'none',
       }
       );
+      
 
     return <RootStack/>
   }
