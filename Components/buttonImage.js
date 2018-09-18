@@ -1,31 +1,18 @@
 import React from 'react'; 
-import {View, TouchableOpacity, Image, StyleSheet, Alert} from 'react-native'
+import {View, TouchableOpacity, Alert} from 'react-native'
+import Images from './helperComps/images';
 
-const buttonImage = () => (
-    <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={()=>{Alert.alert("you clicked me")}}>
-          <Image source={require("../assets/plus.png")} style={{width: 50, height: 50}}/>
-        </TouchableOpacity>
-    </View>
-);
-
-const styles = StyleSheet.create({
-    container: {
+const buttonImage = (props) => (
+    <View style={{
       backgroundColor: '#ff7f2a',
       alignItems: 'center',
       justifyContent: 'center',
-      width: 50, 
-    },
-    button: {
-    //   backgroundColor: '#859a9b',
-    //   borderRadius: 20,
-    //   padding: 10,
-    //   marginBottom: 20,
-    //   shadowColor: '#303838',
-    //   shadowOffset: { width: 0, height: 5 },
-    //   shadowRadius: 10,
-    //   shadowOpacity: 0.35,
-    },
-  });
+      width: props.width
+    }}>
+        <TouchableOpacity  onPress={()=>{Alert.alert("you clicked me")}}>
+          <Images src="plus" width={props.width} height={props.height}/>
+        </TouchableOpacity>
+    </View>
+);
 
 export default buttonImage; 

@@ -20,7 +20,7 @@ class ListScreen extends React.Component {
                     renderSectionHeader={({ section }) => 
                     <View style={styles.rowContainer}>
                         <Text style={styles.header}>{section.title}</Text>
-                        <ButtonImage/>
+                        <ButtonImage width={50} height={50} src="../assets/plus.png"/>
                     </View>}
                     keyExtractor={(item, index) => index}
                 />
