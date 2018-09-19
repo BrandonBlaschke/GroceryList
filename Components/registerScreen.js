@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import {View, Text, TextInput, StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
 import axios from 'react-native-axios';
 import ButtonGL from '../ui/buttonGL';
 
@@ -17,7 +17,7 @@ class registerSreen extends React.Component {
     }
 
     isValidPassword() {
-        return this.state.password !== '' && this.state.password === this.state.password2; 
+        return this.state.password !== '' && this.state.password === this.state.password2;
     }
 
     //Registers a new user in both the authentication and user DB in firebase 
@@ -61,28 +61,37 @@ class registerSreen extends React.Component {
 
     render() {
 
-        let reEnterPass; 
+        let reEnterPass;
 
+        //Display red/green/ or not box around password 
         if (this.isValidPassword()) {
             reEnterPass = <TextInput
-            onChangeText={(text) => { this.setState({ password2: text }) }}
-            secureTextEntry={true}
-            style={styles.textInputPasswordGreen}
-            textAlign={'center'}
-            underlineColorAndroid={'rgba(255,127,42,255)'}
+                onChangeText={(text) => { this.setState({ password2: text }) }}
+                secureTextEntry={true}
+                style={styles.textInputPasswordGreen}
+                textAlign={'center'}
+                underlineColorAndroid={'rgba(255,127,42,255)'}
+            />
+        } else if (this.state.password !== '') {
+            reEnterPass = <TextInput
+                onChangeText={(text) => { this.setState({ password2: text }) }}
+                secureTextEntry={true}
+                style={styles.textInputPasswordRed}
+                textAlign={'center'}
+                underlineColorAndroid={'rgba(255,127,42,255)'}
             />
         } else {
             reEnterPass = <TextInput
-            onChangeText={(text) => { this.setState({ password2: text }) }}
-            secureTextEntry={true}
-            style={styles.textInputPasswordRed}
-            textAlign={'center'}
-            underlineColorAndroid={'rgba(255,127,42,255)'}
-        />
+                onChangeText={(text) => { this.setState({ password2: text }) }}
+                secureTextEntry={true}
+                style={styles.textInput}
+                textAlign={'center'}
+                underlineColorAndroid={'rgba(255,127,42,255)'}
+            />
         }
 
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={-180}>
                 <Text style={styles.text}>Name</Text>
                 <TextInput
                     onChangeText={(text) => { this.setState({ name: text }) }}
@@ -116,7 +125,7 @@ class registerSreen extends React.Component {
                     action={() => {
                         this.register();
                     }} />
-            </View>
+            </KeyboardAvoidingView >
         );
     }
 };
