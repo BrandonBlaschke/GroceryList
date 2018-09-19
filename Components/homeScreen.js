@@ -39,21 +39,7 @@ class HomeScreen extends React.Component {
     }
 
     register() {
-
-        const authData = {
-            email: this.state.email,
-            password: this.state.password, 
-            returnSecureToken: true
-        }
-
-        axios.post(signUpURL, authData)
-        .then(response => {
-            console.log(response.data);
-            Alert.alert("Thank You", "You are now registered and ready to make a grocery list!") ;
-        })
-        .catch(err => {
-            Alert.alert("ERROR", String(err)); 
-        })
+        this.props.navigation.navigate("Register"); 
     }
 
     render() {
