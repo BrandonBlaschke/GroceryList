@@ -9,7 +9,7 @@ const buttonImage = (props) => (
       justifyContent: 'center',
       width: props.width
     }}>
-        <TouchableOpacity  onPress={()=>{Alert.alert("you clicked me")}}>
+        <TouchableOpacity  onPress={() => props.action()}>
           <Images src="plus" width={props.width} height={props.height}/>
         </TouchableOpacity>
     </View>

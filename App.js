@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 import HomeScreen from './Components/homeScreen'; 
 import ListScreen from './Components/listScreen';
 import RegisterScreen from './Components/registerScreen'; 
+import NewListScreen from './Components/newListScreen'; 
 
 export default class App extends React.Component {
 
@@ -12,7 +13,8 @@ export default class App extends React.Component {
       {
         Home: HomeScreen,
         Lists: ListScreen, 
-        Register: RegisterScreen
+        Register: RegisterScreen,
+        NewList: NewListScreen
       },
       {
         initialRouteName:'Home',
