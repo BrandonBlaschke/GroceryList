@@ -1,29 +1,21 @@
 import React from 'react';
-import { createStackNavigator } from 'react-navigation';
-import HomeScreen from './Components/homeScreen'; 
-import ListScreen from './Components/listScreen';
-import RegisterScreen from './Components/registerScreen'; 
-import NewListScreen from './Components/newListScreen'; 
+import {View} from 'react-native'; 
+import RootApp from './Components/rootApp'; 
+import {createStore} from 'redux'; 
+import {Provider} from 'react-redux'; 
+import reducer from './store/reducer'; 
+
+const store = createStore(reducer); 
 
 export default class App extends React.Component {
 
   render() {
 
-    const RootStack = createStackNavigator(
-      {
-        Home: HomeScreen,
-        Lists: ListScreen, 
-        Register: RegisterScreen,
-        NewList: NewListScreen
-      },
-      {
-        initialRouteName:'Home',
-        headerMode: 'none',
-      }
-      );
-      
-
-    return <RootStack/>
+    return (
+     <Provider store={store}>
+        <RootApp/>
+     </Provider>
+    );
   }
 }
 

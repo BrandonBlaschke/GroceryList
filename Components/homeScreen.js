@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View, TextInput, Alert, Image } from 'react-native';
 import axios from 'react-native-axios'; 
 import ButtonGL from '../ui/buttonGL'; 
+import {connect} from 'react-redux'; 
 
 const signUpURL = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAMVYCMXViqpZjt5cQ_GkuKthXTWFzsRAY"
 const signInURL = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyAMVYCMXViqpZjt5cQ_GkuKthXTWFzsRAY'
@@ -9,7 +10,6 @@ const signInURL = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/ve
 class HomeScreen extends React.Component {
 
     state = {
-        email: "", 
         password: '',
         loading: false, 
         success: false 
@@ -17,7 +17,7 @@ class HomeScreen extends React.Component {
 
     signIn() {
         const authData = {
-            email: this.state.email,
+            email: this.props.email,
             password: this.state.password, 
             returnSecureToken: true 
         }
@@ -28,7 +28,6 @@ class HomeScreen extends React.Component {
         .then(response => {
             this.setState({loading: false});
             console.log(response.data); 
-            //Alert.alert("Success", "You Signed In");
             this.props.navigation.navigate("Lists"); 
 
         })
@@ -50,7 +49,7 @@ class HomeScreen extends React.Component {
                 <Image source={require('../assets/logo.png')} style={{width: 150, height: 150}}/>
                 <Text style={styles.text}>Email</Text>
                 <TextInput
-                    onChangeText={(text) => {this.setState({email: text})}} 
+                    onChangeText={(text) => {this.props.setEmail(text)}} 
                     keyboardType="email-address" 
                     style={styles.textInput}
                     textAlign={'center'}
@@ -58,7 +57,7 @@ class HomeScreen extends React.Component {
                 />
                 <Text style={styles.text}>Password</Text>
                 <TextInput
-                    onChangeText={(text) => {this.setState({password: text})}} 
+                    onChangeText={(text) => {this.props.setPassword(text)}} 
                     secureTextEntry={true} 
                     style={styles.textInput}
                     textAlign={'center'}
@@ -74,7 +73,6 @@ class HomeScreen extends React.Component {
                 action={() => {
                     this.register(); 
                   }}/>
-
             </View>
         );
     }
@@ -105,4 +103,16 @@ const styles = StyleSheet.create({
     }
   });
 
-  export default HomeScreen; 
+  function mapStateToProps(state) {
+      return {
+          email: state.email
+      }
+  }
+
+  function mapDispatchToProps(dispatch) {
+      return {
+          setEmail: (email) => dispatch({type: 'SET_EMAIL', value: email}),
+      }
+  }
+
+  export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen); 

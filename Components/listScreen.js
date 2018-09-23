@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, axios, TextInput, Button, Alert, SectionList } from 'react-native';
 import ButtonImage from '../Components/buttonImage';
+import {connect} from 'react-redux'; 
 
 class ListScreen extends React.Component {
     render() {
@@ -57,5 +58,11 @@ const styles = StyleSheet.create({
     }
 });
 
+function mapStateToProps(state) {
+    return {
+        name: state.name,
+        email: state.email, 
+    }
+}
 
-export default ListScreen; 
+export default connect(mapStateToProps)(ListScreen); 

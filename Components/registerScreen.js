@@ -2,14 +2,13 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
 import axios from 'react-native-axios';
 import ButtonGL from '../ui/buttonGL';
+import {connect} from 'react-redux'; 
 
 const signUpURL = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAMVYCMXViqpZjt5cQ_GkuKthXTWFzsRAY"
 
-class registerSreen extends React.Component {
+class RegisterSreen extends React.Component {
 
     state = {
-        name: '',
-        email: '',
         password: '',
         password2: '',
         match: false,
@@ -24,12 +23,14 @@ class registerSreen extends React.Component {
     register() {
 
         const newUser = {
-            name: this.state.name,
-            email: this.state.email,
+            name: this.props.name,
+            email: this.props.email,
         }
 
+        console.log(newUser); 
+
         const authData = {
-            email: this.state.email,
+            email: this.props.email,
             password: this.state.password,
             returnSecureToken: true
         }
@@ -42,7 +43,7 @@ class registerSreen extends React.Component {
                     axios.post('https://grocerylist-e144a.firebaseio.com/users.json', newUser)
                         .then(response2 => {
                             console.log(response2.data);
-                            Alert.alert('Thank you', 'You\'r now registerd and ready to make a grocery list!');
+                            Alert.alert('Thank you', 'You\'re now registerd and ready to make a grocery list!');
                             this.props.navigation.navigate('Lists');
                         })
                         .catch(error => {
@@ -94,7 +95,7 @@ class registerSreen extends React.Component {
             <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={-180}>
                 <Text style={styles.text}>Name</Text>
                 <TextInput
-                    onChangeText={(text) => { this.setState({ name: text }) }}
+                    onChangeText={(text) => { this.props.setName(text)}}
                     style={styles.textInput}
                     textAlign={'center'}
                     underlineColorAndroid={'rgba(255,127,42,255)'}
@@ -102,7 +103,7 @@ class registerSreen extends React.Component {
 
                 <Text style={styles.text}>Email</Text>
                 <TextInput
-                    onChangeText={(text) => { this.setState({ email: text }) }}
+                    onChangeText={(text) => { this.props.setEmail(text)}}
                     keyboardType="email-address"
                     style={styles.textInput}
                     textAlign={'center'}
@@ -181,5 +182,19 @@ const styles = StyleSheet.create({
     },
 });
 
+function mapStateToProps(state) {
+    return {
+        email: state.email,
+        name: state.name
+    }
+}
 
-export default registerSreen; 
+function mapDispatchToProps(dispatch) {
+    return {
+        setEmail: (email) => dispatch({type: 'SET_EMAIL', value: email}),
+        setName: (name) => dispatch({type: 'SET_NAME', value: name})
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterSreen); 
