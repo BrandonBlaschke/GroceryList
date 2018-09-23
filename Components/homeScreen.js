@@ -57,7 +57,7 @@ class HomeScreen extends React.Component {
                 />
                 <Text style={styles.text}>Password</Text>
                 <TextInput
-                    onChangeText={(text) => {this.props.setPassword(text)}} 
+                    onChangeText={(text) => {this.setState({password: text})}} 
                     secureTextEntry={true} 
                     style={styles.textInput}
                     textAlign={'center'}
