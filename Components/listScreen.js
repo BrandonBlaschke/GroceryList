@@ -1,30 +1,75 @@
 import React from 'react';
-import { StyleSheet, Text, View, axios, TextInput, Button, Alert, SectionList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert, SectionList } from 'react-native';
 import ButtonImage from '../Components/buttonImage';
-import {connect} from 'react-redux'; 
+import axios from 'react-native-axios';
+import { connect } from 'react-redux';
+
+const link = 'https://grocerylist-e144a.firebaseio.com/lists.json';
 
 class ListScreen extends React.Component {
+
+    state = {
+        lists: [],
+        dates: {}, 
+        loading: true,
+    }
+
+    componentDidMount() {
+
+        let temp = link + '?orderBy="id"&equalTo="' + this.props.email + '"' 
+        axios.get(temp)
+            .then(res => {
+                // console.log("-----LISTS-------");
+                // console.log(res.data);
+
+                let listNames = [];
+                let listDates = {}; 
+                let temp;
+                for (let key in res.data) {
+                    temp = { ...res.data[key] }
+                    listNames.push(temp.name);
+                    listDates[temp.name] = temp.date;  
+                }
+
+                this.setState({ lists: listNames, loading: false, dates: listDates });
+            })
+            .catch(error => {
+                console.log(String(error)); 
+                Alert.alert("ERROR", String(error));
+                this.setState({ loading: false });
+            });
+    }
+
     render() {
-        return (
-            <View style={styles.container}>
-                <SectionList
-                    sections={[
-                        { title: 'Your Lists', data: ['List 1', 'List 2', 'List 5', 'List 6', 'List 1', 'List 2', 'List 5', 'List 6', 'List 1', 'List 2', 'List 5', 'List 6'] },
-                        { title: 'Joined Lists', data: ['List 3', 'List 4'] }
-                    ]}
-                    renderItem={({ item }) => 
+
+        let lists = <Text>LOADING...</Text>
+        
+        if (!this.state.loading) {
+            listNames = this.state.lists
+            lists =
+            <SectionList
+                sections={[
+                    { title: 'Your Lists', data: listNames},
+                    { title: 'Joined Lists', data: ['List 3', 'List 4'] }
+                ]}
+                renderItem={({ item }) =>
                     <View style={styles.rowContainer}>
                         <Text style={styles.text}>{item}</Text>
                         <Text style={styles.text}>----------------------</Text>
-                        <Text style={styles.text}>01/01/2018</Text>
+                        <Text style={styles.text}>{this.state.dates[item]}</Text>
                     </View>}
-                    renderSectionHeader={({ section }) => 
+                renderSectionHeader={({ section }) =>
                     <View style={styles.rowContainer}>
                         <Text style={styles.header}>{section.title}</Text>
-                        <ButtonImage width={50} height={50} src="../assets/plus.png" action={() => this.props.navigation.navigate("NewList")}/>
+                        <ButtonImage width={50} height={50} src="../assets/plus.png" action={() => this.props.navigation.navigate("NewList")} />
                     </View>}
-                    keyExtractor={(item, index) => index}
-                />
+                keyExtractor={(item, index) => index}
+            />
+        }
+
+        return (
+            <View style={styles.container}>
+                {lists}
             </View>
         );
     }
@@ -37,8 +82,8 @@ const styles = StyleSheet.create({
         marginTop: 0
     },
     rowContainer: {
-        flex: 3, 
-        flexDirection: 'row', 
+        flex: 3,
+        flexDirection: 'row',
         justifyContent: 'space-between',
     },
     header: {
@@ -61,7 +106,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
     return {
         name: state.name,
-        email: state.email, 
+        email: state.email,
     }
 }
 

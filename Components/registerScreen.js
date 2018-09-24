@@ -27,8 +27,6 @@ class RegisterSreen extends React.Component {
             email: this.props.email,
         }
 
-        console.log(newUser); 
-
         const authData = {
             email: this.props.email,
             password: this.state.password,
@@ -39,10 +37,9 @@ class RegisterSreen extends React.Component {
         if (this.isValidPassword()) {
             axios.post(signUpURL, authData)
                 .then(response => {
-                    console.log(response.data);
                     axios.post('https://grocerylist-e144a.firebaseio.com/users.json', newUser)
                         .then(response2 => {
-                            console.log(response2.data);
+                            (response2.data);
                             Alert.alert('Thank you', 'You\'re now registerd and ready to make a grocery list!');
                             this.props.navigation.navigate('Lists');
                         })

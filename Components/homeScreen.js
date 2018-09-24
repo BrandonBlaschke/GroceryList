@@ -4,8 +4,9 @@ import axios from 'react-native-axios';
 import ButtonGL from '../ui/buttonGL'; 
 import {connect} from 'react-redux'; 
 
-const signUpURL = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAMVYCMXViqpZjt5cQ_GkuKthXTWFzsRAY"
 const signInURL = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyAMVYCMXViqpZjt5cQ_GkuKthXTWFzsRAY'
+const usersLink = 'https://grocerylist-e144a.firebaseio.com/users.json';
+
 
 class HomeScreen extends React.Component {
 
@@ -25,10 +26,24 @@ class HomeScreen extends React.Component {
         this.setState({loading: true});
 
         axios.post(signInURL, authData)
-        .then(response => {
-            this.setState({loading: false});
-            console.log(response.data); 
-            this.props.navigation.navigate("Lists"); 
+        .then(res => {
+            //Get user name from db 
+            axios.get(usersLink + '?orderBy="email"&equalTo="' + this.props.email + '"')
+            .then(response => {
+
+                let name; 
+                for (let key in response.data) {
+                    obj = {...response.data[key]}
+                    name = obj.name;
+                }
+                this.setState({loading: false});
+                this.props.setName(name); 
+                this.props.navigation.navigate("Lists"); 
+            })
+            .catch(error => {
+                Alert.alert("ERROR", String(error)); 
+                this.setState({loading: false});
+            })
 
         })
         .catch(err => {
@@ -112,6 +127,7 @@ const styles = StyleSheet.create({
   function mapDispatchToProps(dispatch) {
       return {
           setEmail: (email) => dispatch({type: 'SET_EMAIL', value: email}),
+          setName: (name) => dispatch({type: 'SET_NAME', value: name})
       }
   }
 
