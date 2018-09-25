@@ -4,7 +4,7 @@ import Images from './helperComps/images';
 
 const buttonImage = (props) => (
     <View style={{
-      backgroundColor: '#ff7f2a',
+      backgroundColor: props.bgColor,
       alignItems: 'center',
       justifyContent: 'center',
       width: props.width
