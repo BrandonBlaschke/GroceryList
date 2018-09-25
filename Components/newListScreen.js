@@ -1,10 +1,10 @@
-import React from 'react'; 
-import {View, Text, TextInput, StyleSheet, Alert} from 'react-native'; 
-import ButtonGL from '../ui/buttonGL'; 
-import axios from 'react-native-axios'; 
-import {connect} from 'react-redux'; 
+import React from 'react';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import ButtonGL from '../ui/buttonGL';
+import axios from 'react-native-axios';
+import { connect } from 'react-redux';
 
-const link = 'https://grocerylist-e144a.firebaseio.com/lists.json'; 
+const link = 'https://grocerylist-e144a.firebaseio.com/lists.json';
 
 class NewListScreen extends React.Component {
 
@@ -14,45 +14,52 @@ class NewListScreen extends React.Component {
     }
 
     createList() {
-        const d = new Date(); 
-        const today = d.getMonth() + 1  + "/" + d.getDate() + "/" + d.getFullYear(); 
-        this.setState({loading: true}); 
 
-        const listData = {
-            id: this.props.email,
-            date: today, 
-            name: this.state.listName,
-            author: this.props.name,
+        if (this.state.listName === '') {
+            Alert.alert("Invalid Length", "List name can't be empty");
+        } else {
+            const d = new Date();
+            const today = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+            this.setState({ loading: true });
+
+            const listData = {
+                id: this.props.email,
+                date: today,
+                name: this.state.listName,
+                author: this.props.name,
+            }
+
+            axios.post(link, listData)
+                .then(response => {
+                    this.setState({ loading: false });
+                    this.props.navigation.goBack();
+                })
+                .catch(error => {
+                    console.log(String(error));
+                    Alert.alert('ERROR', String(error));
+                });
         }
 
-        axios.post(link, listData)
-        .then(response => {
-            this.setState({loading: false});
-            this.props.navigation.goBack(); 
-        })
-        .catch(error => {
-            console.log(String(error)); 
-            Alert.alert('ERROR', String(error)); 
-        });
+
 
     }
 
     render() {
 
-        let buttonTitle = <ButtonGL title="Create List" action={() => {this.createList()}}/>; 
+        let buttonTitle = <ButtonGL title="Create List" action={() => { this.createList() }} />;
 
         if (this.state.loading) {
-            buttonTitle = <ButtonGL title="Creating..." action={() => {this.createList()}}/>
+            buttonTitle = <ButtonGL title="Creating..." action={() => { this.createList() }} />
         }
 
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>Create a new grocery list</Text>
                 <Text style={styles.text}>Name</Text>
-                <TextInput style={styles.textInput} onChangeText={(text) => {this.setState({listName: text})}}/>
+                <TextInput style={styles.textInput} onChangeText={(text) => { this.setState({ listName: text }) }} />
                 {buttonTitle}
             </View>
-        ); 
+        );
     }
 }
 
@@ -71,7 +78,7 @@ const styles = StyleSheet.create({
     title: {
         color: "#ff7f2a",
         fontSize: 30,
-        marginBottom: 60, 
+        marginBottom: 60,
     },
     textInput: {
         width: "60%",
@@ -91,7 +98,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
     return {
         email: state.email,
-        name: state.name, 
+        name: state.name,
     }
 }
 

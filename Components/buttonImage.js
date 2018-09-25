@@ -9,8 +9,8 @@ const buttonImage = (props) => (
       justifyContent: 'center',
       width: props.width
     }}>
-        <TouchableOpacity  onPress={() => props.action()}>
-          <Images src="plus" width={props.width} height={props.height}/>
+        <TouchableOpacity onPress={() => props.action()}>
+          <Images src={props.src} width={props.width} height={props.height}/>
         </TouchableOpacity>
     </View>
 );

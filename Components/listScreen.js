@@ -14,8 +14,8 @@ class ListScreen extends React.Component {
         loading: true,
     }
 
-    componentDidMount() {
-
+    //Retrieve lists from db using the email provided to sign in 
+    getLists()  {
         let temp = link + '?orderBy="id"&equalTo="' + this.props.email + '"' 
         axios.get(temp)
             .then(res => {
@@ -38,6 +38,10 @@ class ListScreen extends React.Component {
                 Alert.alert("ERROR", String(error));
                 this.setState({ loading: false });
             });
+    } 
+
+    componentDidMount() {
+        this.getLists();
     }
 
     render() {
@@ -61,7 +65,8 @@ class ListScreen extends React.Component {
                 renderSectionHeader={({ section }) =>
                     <View style={styles.rowContainer}>
                         <Text style={styles.header}>{section.title}</Text>
-                        <ButtonImage width={50} height={50} src="../assets/plus.png" action={() => this.props.navigation.navigate("NewList")} />
+                        <ButtonImage src="refresh" width={50} height={50} action={() => {this.getLists()}}/>
+                        <ButtonImage src="plus" width={50} height={50} action={() => this.props.navigation.navigate("NewList")} />
                     </View>}
                 keyExtractor={(item, index) => index}
             />

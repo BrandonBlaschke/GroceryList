@@ -8,6 +8,8 @@ const images = (props) => {
     switch(props.src) {
         case 'plus':
             return <Image source={require("../../assets/plus.png")} style={{width: props.width, height: props.height}}/>
+        case 'refresh':
+            return <Image source={require("../../assets/refresh.png")} style={{width: props.width, height: props.height}}/>
         default:
             src = '';
             break; 
