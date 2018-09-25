@@ -40,8 +40,6 @@ class NewListScreen extends React.Component {
                 });
         }
 
-
-
     }
 
     render() {

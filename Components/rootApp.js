@@ -4,6 +4,7 @@ import HomeScreen from './homeScreen';
 import ListScreen from './listScreen';
 import RegisterScreen from './registerScreen'; 
 import NewListScreen from './newListScreen'; 
+import ViewListScreen from './viewListScreen';
 
 export default class RootApp extends React.Component {
 
@@ -14,7 +15,8 @@ export default class RootApp extends React.Component {
         Home: HomeScreen,
         Lists: ListScreen, 
         Register: RegisterScreen,
-        NewList: NewListScreen
+        NewList: NewListScreen,
+        ViewList: ViewListScreen
       },
       {
         initialRouteName:'Home',

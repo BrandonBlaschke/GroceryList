@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert, SectionList } from 'react-native';
+import { StyleSheet, Text, View, Alert, SectionList, TouchableOpacity } from 'react-native';
 import ButtonImage from '../Components/buttonImage';
 import axios from 'react-native-axios';
+import * as actionTypes from '../store/actions';
 import { connect } from 'react-redux';
 
 const link = 'https://grocerylist-e144a.firebaseio.com/lists.json';
@@ -40,6 +41,11 @@ class ListScreen extends React.Component {
             });
     } 
 
+    goToList(listName) {
+        this.props.setListView(listName); 
+        this.props.navigation.navigate("ViewList");
+    }
+
     componentDidMount() {
         this.getLists();
     }
@@ -57,11 +63,11 @@ class ListScreen extends React.Component {
                     { title: 'Joined Lists', data: ['List 3', 'List 4'] }
                 ]}
                 renderItem={({ item }) =>
-                    <View style={styles.rowContainer}>
+                    <TouchableOpacity style={styles.rowContainer} onPress={() => {this.goToList(item)}}>
                         <Text style={styles.text}>{item}</Text>
                         <Text style={styles.text}>----------------------</Text>
                         <Text style={styles.text}>{this.state.dates[item]}</Text>
-                    </View>}
+                    </TouchableOpacity>}
                 renderSectionHeader={({ section }) =>
                     <View style={styles.rowContainer}>
                         <Text style={styles.header}>{section.title}</Text>
@@ -115,4 +121,10 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(ListScreen); 
+function mapDispatchToProps(dispatch) {
+    return {
+        setListView: (listView) => dispatch({type: actionTypes.SET_LIST_VIEW, value: listView}),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListScreen); 

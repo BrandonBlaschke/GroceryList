@@ -3,6 +3,7 @@ import * as actionTypes from './actions';
 const initialState = {
     email: '',
     name: '',
+    listView: '',
 };
 
 const reducer = (state = initialState, action) => {
@@ -11,6 +12,8 @@ const reducer = (state = initialState, action) => {
             return { ...state, email: action.value }
         case actionTypes.SET_NAME:
             return { ...state, name: action.value }
+        case actionTypes.SET_LIST_VIEW:
+            return {...state, listView: action.value}
         default:
             return state
     };
