@@ -1,5 +1,15 @@
 {
   "expo": {
-    "sdkVersion": "27.0.0"
+    "name": "Grocery List",
+    "sdkVersion": "27.0.0",
+    "version": "1.0.0",
+    "ios": {
+      "bundleIdentifier": "com.brandonblaschke.grocerylist"
+    },
+    "android": {
+      "package": "com.brandonblaschke.grocerylist",
+      "versionCode": 1,
+      "permissions": []
+    }
   }
 }
