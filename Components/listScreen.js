@@ -12,6 +12,7 @@ class ListScreen extends React.Component {
     state = {
         lists: [],
         dates: {}, 
+        keys: {},
         loading: true,
     }
 
@@ -25,14 +26,16 @@ class ListScreen extends React.Component {
 
                 let listNames = [];
                 let listDates = {}; 
+                let listKeys = {}; 
                 let temp;
                 for (let key in res.data) {
                     temp = { ...res.data[key] }
                     listNames.push(temp.name);
-                    listDates[temp.name] = temp.date;  
+                    listDates[temp.name] = temp.date;
+                    listKeys[temp.name] = key; 
                 }
 
-                this.setState({ lists: listNames, loading: false, dates: listDates });
+                this.setState({ lists: listNames, loading: false, dates: listDates, keys: listKeys });
             })
             .catch(error => {
                 console.log(String(error)); 
@@ -43,6 +46,7 @@ class ListScreen extends React.Component {
 
     goToList(listName) {
         this.props.setListView(listName); 
+        this.props.setListID(this.state.keys[listName]);
         this.props.navigation.navigate("ViewList");
     }
 
@@ -124,6 +128,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setListView: (listView) => dispatch({type: actionTypes.SET_LIST_VIEW, value: listView}),
+        setListID: (id) => dispatch({type: actionTypes.SET_LIST_ID, value: id})
     }
 }
 

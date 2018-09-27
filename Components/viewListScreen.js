@@ -63,7 +63,7 @@ class ViewListScreen extends React.Component {
                         <View style={styles.rowContainer}>
                             <Text style={styles.header}>{section.title}</Text>
                             <ButtonImage src="refresh" bgColor="#ff7f2a" width={50} height={50} action={() => { this.getItems() }} />
-                            <ButtonImage src="plus" bgColor="#ff7f2a" width={50} height={50} action={() => { this.getItems() }} />
+                            <ButtonImage src="plus" bgColor="#ff7f2a" width={50} height={50} action={() => { this.props.navigation.navigate("AddFood")  }} />
                         </View>}
                     keyExtractor={(item, index) => index}
 

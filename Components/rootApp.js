@@ -5,6 +5,7 @@ import ListScreen from './listScreen';
 import RegisterScreen from './registerScreen'; 
 import NewListScreen from './newListScreen'; 
 import ViewListScreen from './viewListScreen';
+import AddFoodScreen from './addFoodScreen'; 
 
 export default class RootApp extends React.Component {
 
@@ -16,7 +17,8 @@ export default class RootApp extends React.Component {
         Lists: ListScreen, 
         Register: RegisterScreen,
         NewList: NewListScreen,
-        ViewList: ViewListScreen
+        ViewList: ViewListScreen,
+        AddFood: AddFoodScreen
       },
       {
         initialRouteName:'Home',
