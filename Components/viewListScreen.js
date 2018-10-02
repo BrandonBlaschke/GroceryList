@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SectionList, Alert } from 'react-native';
 import axios from 'react-native-axios';
 import ButtonImage from './buttonImage';
 import ListItem from '../ui/listItem';
@@ -11,6 +11,7 @@ class ViewListScreen extends React.Component {
 
     state = {
         foods: [],
+        foodsOut: [],
         foodIds: {}
     }
 
@@ -22,21 +23,65 @@ class ViewListScreen extends React.Component {
 
         axios.get(link + '/' + this.props.listId + '.json')
         .then(res => {
-            console.log(res); 
+            // console.log(res); 
             let foodsObj = []; 
+            let foodsObjOut = [];
             let foodId = {}; 
             let temp; 
             for (let key in res.data.food) {
+
+                //If teh value of the food is 1, place in the non picked up list
                 temp = {...res.data.food[key]};
-                foodsObj.push(temp); 
+                if (temp.value) {
+                    foodsObj.push(temp); 
+                } else {
+                    foodsObjOut.push(temp); 
+                }
                 foodId[temp.name] = key; 
             }
 
-            this.setState({foods: foodsObj, foodIds: foodId}); 
+            this.setState({foods: foodsObj, foodsOut: foodsObjOut, foodIds: foodId}); 
         })
         .catch(err => {
             console.log(String(err)); 
+            Alert.alert("ERROR", "Can't retrieve foods"); 
         })
+    }
+
+    //Makes a deep copy of ONLY a list of foods
+    copyList(list) {
+        let temp = []; 
+        for (let key in list) {
+            temp.push({...list[key]})       
+        }
+        return temp; 
+    }
+
+    //Finds index of a food given a list
+    findFood(foodName, list) {
+        for (let i = 0; i < list.length; i++) {
+            if (foodName === list[i].name) {
+                return i; 
+            }
+        }
+    }
+
+    toggleFood(food) {
+        let foodsCopy = this.copyList(this.state.foods);
+        let foodsOutCopy = this.copyList(this.state.foodsOut); 
+
+        if (food.value) {
+            
+            foodsCopy.splice(this.findFood(food.name, foodsCopy), 1); 
+            food.value = 0; 
+            foodsOutCopy.push(food); 
+        } else {
+            foodsOutCopy.splice(this.findFood(food.name, foodsOutCopy), 1); 
+            food.value = 1; 
+            foodsCopy.push(food); 
+        }
+        
+        this.setState({foods: foodsCopy, foodsOut: foodsOutCopy});
     }
 
     trash() {
@@ -45,16 +90,14 @@ class ViewListScreen extends React.Component {
 
     render() {
 
-        list2 = [{ name: 'Item 6', value: 0 }, { name: 'Item 7', value: 8 }, { name: 'Item 8', value: 0 }, { name: 'Item 9', value: 0 }, { name: 'Item 10', value: 0 }];
-
         return (
             <View style={styles.container}>
                 <SectionList
                     sections={[
                         { title: this.props.listView, data: this.state.foods },
-                        { title: 'Picked Up', data: list2 }
+                        { title: 'Picked Up', data: this.state.foodsOut }
                     ]}
-                    renderItem={({ item }) => (<ListItem name={item.name} value={item.value} quantity={item.quantity + "qt"} trash={this.trash} response={this.getItems} />)}
+                    renderItem={({ item }) => (<ListItem name={item.name} value={item.value} quantity={item.quantity + "qt"} trash={this.trash} response={() => this.toggleFood(item)} />)}
                     renderSectionHeader={({ section }) =>
                         <View style={styles.rowContainer}>
                             <Text style={styles.header}>{section.title}</Text>
