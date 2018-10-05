@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SectionList, Alert } from 'react-native';
+import { View, Text, StyleSheet, SectionList, Alert, ActivityIndicator } from 'react-native';
 import axios from 'react-native-axios';
 import ButtonImage from './buttonImage';
 import ListItem from '../ui/listItem';
@@ -12,7 +12,8 @@ class ViewListScreen extends React.Component {
     state = {
         foods: [],
         foodsOut: [],
-        foodIds: {}
+        foodIds: {},
+        loading: true
     }
 
     componentDidMount() {
@@ -21,67 +22,79 @@ class ViewListScreen extends React.Component {
 
     getItems() {
 
+        this.setState({ loading: true });
         axios.get(link + '/' + this.props.listId + '.json')
-        .then(res => {
-            // console.log(res); 
-            let foodsObj = []; 
-            let foodsObjOut = [];
-            let foodId = {}; 
-            let temp; 
-            for (let key in res.data.food) {
+            .then(res => {
+                // console.log(res); 
+                let foodsObj = [];
+                let foodsObjOut = [];
+                let foodId = {};
+                let temp;
+                for (let key in res.data.food) {
 
-                //If teh value of the food is 1, place in the non picked up list
-                temp = {...res.data.food[key]};
-                if (temp.value) {
-                    foodsObj.push(temp); 
-                } else {
-                    foodsObjOut.push(temp); 
+                    //If teh value of the food is 1, place in the non picked up list
+                    temp = { ...res.data.food[key] };
+                    if (temp.value) {
+                        foodsObj.push(temp);
+                    } else {
+                        foodsObjOut.push(temp);
+                    }
+                    foodId[temp.name] = key;
                 }
-                foodId[temp.name] = key; 
-            }
 
-            this.setState({foods: foodsObj, foodsOut: foodsObjOut, foodIds: foodId}); 
-        })
-        .catch(err => {
-            console.log(String(err)); 
-            Alert.alert("ERROR", "Can't retrieve foods"); 
-        })
+                this.setState({ foods: foodsObj, foodsOut: foodsObjOut, foodIds: foodId, loading: false });
+            })
+            .catch(err => {
+                console.log(String(err));
+                this.setState({ loading: false });
+                Alert.alert("ERROR", "Can't retrieve foods");
+            })
     }
 
     //Makes a deep copy of ONLY a list of foods
     copyList(list) {
-        let temp = []; 
+        let temp = [];
         for (let key in list) {
-            temp.push({...list[key]})       
+            temp.push({ ...list[key] })
         }
-        return temp; 
+        return temp;
     }
 
     //Finds index of a food given a list
     findFood(foodName, list) {
         for (let i = 0; i < list.length; i++) {
             if (foodName === list[i].name) {
-                return i; 
+                return i;
             }
         }
     }
 
+    //Changes the value of the food and in the data base 
     toggleFood(food) {
         let foodsCopy = this.copyList(this.state.foods);
-        let foodsOutCopy = this.copyList(this.state.foodsOut); 
+        let foodsOutCopy = this.copyList(this.state.foodsOut);
 
         if (food.value) {
-            
-            foodsCopy.splice(this.findFood(food.name, foodsCopy), 1); 
-            food.value = 0; 
-            foodsOutCopy.push(food); 
+
+            foodsCopy.splice(this.findFood(food.name, foodsCopy), 1);
+            food.value = 0;
+            foodsOutCopy.push(food);
         } else {
-            foodsOutCopy.splice(this.findFood(food.name, foodsOutCopy), 1); 
-            food.value = 1; 
-            foodsCopy.push(food); 
+            foodsOutCopy.splice(this.findFood(food.name, foodsOutCopy), 1);
+            food.value = 1;
+            foodsCopy.push(food);
         }
-        
-        this.setState({foods: foodsCopy, foodsOut: foodsOutCopy});
+
+        this.setState({ foods: foodsCopy, foodsOut: foodsOutCopy });
+
+        axios.patch(link + '/' + this.props.listId + '/' + 'food/' + this.state.foodIds[food.name] + '.json', food)
+            .then(res => {
+                // console.log(res);
+            })
+            .catch(err => {
+                Alert.alert("ERROR", 'Could not update item to data base'); 
+                console.log(String(err));
+            })
     }
 
     trash() {
@@ -90,23 +103,29 @@ class ViewListScreen extends React.Component {
 
     render() {
 
+        let lists = <SectionList
+            sections={[
+                { title: this.props.listView, data: this.state.foods },
+                { title: 'Picked Up', data: this.state.foodsOut }
+            ]}
+            renderItem={({ item }) => (<ListItem name={item.name} value={item.value} quantity={item.quantity + "qt"} trash={this.trash} response={() => this.toggleFood(item)} />)}
+            renderSectionHeader={({ section }) =>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.header}>{section.title}</Text>
+                    <ButtonImage src="refresh" bgColor="#ff7f2a" width={50} height={50} action={() => { this.getItems() }} />
+                    <ButtonImage src="plus" bgColor="#ff7f2a" width={50} height={50} action={() => { this.props.navigation.navigate("AddFood") }} />
+                </View>}
+            keyExtractor={(item, index) => index}
+
+            />
+
+        if (this.state.loading) {
+            lists = <ActivityIndicator style={{justifyContent: 'center', marginTop: '50%'}} size={10} color="#ff7f2a" />
+        }
+
         return (
             <View style={styles.container}>
-                <SectionList
-                    sections={[
-                        { title: this.props.listView, data: this.state.foods },
-                        { title: 'Picked Up', data: this.state.foodsOut }
-                    ]}
-                    renderItem={({ item }) => (<ListItem name={item.name} value={item.value} quantity={item.quantity + "qt"} trash={this.trash} response={() => this.toggleFood(item)} />)}
-                    renderSectionHeader={({ section }) =>
-                        <View style={styles.rowContainer}>
-                            <Text style={styles.header}>{section.title}</Text>
-                            <ButtonImage src="refresh" bgColor="#ff7f2a" width={50} height={50} action={() => { this.getItems() }} />
-                            <ButtonImage src="plus" bgColor="#ff7f2a" width={50} height={50} action={() => { this.props.navigation.navigate("AddFood") }} />
-                        </View>}
-                    keyExtractor={(item, index) => index}
-
-                />
+                {lists}
             </View>
         );
     }
