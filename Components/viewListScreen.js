@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SectionList, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SectionList, Alert, ActivityIndicator, ToastAndroid } from 'react-native';
 import axios from 'react-native-axios';
 import ButtonImage from './buttonImage';
 import ListItem from '../ui/listItem';
@@ -32,7 +32,7 @@ class ViewListScreen extends React.Component {
                 let temp;
                 for (let key in res.data.food) {
 
-                    //If teh value of the food is 1, place in the non picked up list
+                    //If the value of the food is 1, place in the non picked up list
                     temp = { ...res.data.food[key] };
                     if (temp.value) {
                         foodsObj.push(temp);
@@ -97,8 +97,27 @@ class ViewListScreen extends React.Component {
             })
     }
 
-    trash() {
-        console.log("trash item");
+    trash(item) {
+        let foodsCopy = this.copyList(this.state.foods);
+        let foodsOutCopy = this.copyList(this.state.foodsOut);
+
+        if (item.value) {
+            foodsCopy.splice(this.findFood(item.name, foodsCopy), 1); 
+        } else {
+            foodsOutCopy.splice(this.findFood(item.name, foodsOutCopy), 1); 
+        }
+
+        this.setState({foods: foodsCopy, foodsOut: foodsOutCopy});
+
+        axios.delete(link + '/' + this.props.listId + '/' + 'food/' + this.state.foodIds[item.name] + '.json', item)
+        .then(res => {
+            ToastAndroid.show(item.name + " was deleted from list", ToastAndroid.SHORT); 
+            // console.log(res);
+        })
+        .catch(err => {
+            Alert.alert("ERROR", 'Could not delete item from data base'); 
+            console.log(String(err)); 
+        })
     }
 
     render() {
@@ -108,7 +127,7 @@ class ViewListScreen extends React.Component {
                 { title: this.props.listView, data: this.state.foods },
                 { title: 'Picked Up', data: this.state.foodsOut }
             ]}
-            renderItem={({ item }) => (<ListItem name={item.name} value={item.value} quantity={item.quantity + "qt"} trash={this.trash} response={() => this.toggleFood(item)} />)}
+            renderItem={({ item }) => (<ListItem name={item.name} value={item.value} quantity={item.quantity + "qt"} trash={() => this.trash(item)} response={() => this.toggleFood(item)} />)}
             renderSectionHeader={({ section }) =>
                 <View style={styles.rowContainer}>
                     <Text style={styles.header}>{section.title}</Text>
