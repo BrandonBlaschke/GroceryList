@@ -27,6 +27,7 @@ class NewListScreen extends React.Component {
                 date: today,
                 name: this.state.listName,
                 author: this.props.name,
+                members: [this.props.email] 
             }
 
             axios.post(link, listData)

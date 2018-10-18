@@ -92,7 +92,7 @@ class ViewListScreen extends React.Component {
                 // console.log(res);
             })
             .catch(err => {
-                Alert.alert("ERROR", 'Could not update item to data base'); 
+                Alert.alert("ERROR", 'Could not update item to data base');
                 console.log(String(err));
             })
     }
@@ -102,22 +102,22 @@ class ViewListScreen extends React.Component {
         let foodsOutCopy = this.copyList(this.state.foodsOut);
 
         if (item.value) {
-            foodsCopy.splice(this.findFood(item.name, foodsCopy), 1); 
+            foodsCopy.splice(this.findFood(item.name, foodsCopy), 1);
         } else {
-            foodsOutCopy.splice(this.findFood(item.name, foodsOutCopy), 1); 
+            foodsOutCopy.splice(this.findFood(item.name, foodsOutCopy), 1);
         }
 
-        this.setState({foods: foodsCopy, foodsOut: foodsOutCopy});
+        this.setState({ foods: foodsCopy, foodsOut: foodsOutCopy });
 
         axios.delete(link + '/' + this.props.listId + '/' + 'food/' + this.state.foodIds[item.name] + '.json', item)
-        .then(res => {
-            ToastAndroid.show(item.name + " was deleted from list", ToastAndroid.SHORT); 
-            // console.log(res);
-        })
-        .catch(err => {
-            Alert.alert("ERROR", 'Could not delete item from data base'); 
-            console.log(String(err)); 
-        })
+            .then(res => {
+                ToastAndroid.show(item.name + " was deleted from list", ToastAndroid.SHORT);
+                // console.log(res);
+            })
+            .catch(err => {
+                Alert.alert("ERROR", 'Could not delete item from data base');
+                console.log(String(err));
+            })
     }
 
     render() {
@@ -128,18 +128,30 @@ class ViewListScreen extends React.Component {
                 { title: 'Picked Up', data: this.state.foodsOut }
             ]}
             renderItem={({ item }) => (<ListItem name={item.name} value={item.value} quantity={item.quantity + "qt"} trash={() => this.trash(item)} response={() => this.toggleFood(item)} />)}
-            renderSectionHeader={({ section }) =>
-                <View style={styles.rowContainer}>
-                    <Text style={styles.header}>{section.title}</Text>
-                    <ButtonImage src="refresh" bgColor="#ff7f2a" width={50} height={50} action={() => { this.getItems() }} />
-                    <ButtonImage src="plus" bgColor="#ff7f2a" width={50} height={50} action={() => { this.props.navigation.navigate("AddFood") }} />
-                </View>}
+            renderSectionHeader={({ section }) => {
+                if (section.title != 'Picked Up') {
+                    return (
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.header}>{section.title}</Text>
+                        <ButtonImage src="refresh" bgColor="#ff7f2a" width={50} height={50} action={() => { this.getItems() }} />
+                        <ButtonImage src="plus" bgColor="#ff7f2a" width={50} height={50} action={() => { this.props.navigation.navigate("AddFood") }} />
+                        <ButtonImage src="plus" bgColor="#ff7f2a" width={50} height={50} action={() => this.props.navigation.navigate("Invite")} />
+                    </View>);
+                } else {
+                    return (
+                        <View style={styles.rowContainer}>
+                            <Text style={styles.header}>{section.title}</Text>
+                        </View>
+                    );
+                }
+            }
+            }
             keyExtractor={(item, index) => index}
 
-            />
+        />
 
         if (this.state.loading) {
-            lists = <ActivityIndicator style={{justifyContent: 'center', marginTop: '50%'}} size={10} color="#ff7f2a" />
+            lists = <ActivityIndicator style={{ justifyContent: 'center', marginTop: '50%' }} size={10} color="#ff7f2a" />
         }
 
         return (

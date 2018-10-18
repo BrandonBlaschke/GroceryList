@@ -6,6 +6,7 @@ import RegisterScreen from './registerScreen';
 import NewListScreen from './newListScreen'; 
 import ViewListScreen from './viewListScreen';
 import AddFoodScreen from './addFoodScreen'; 
+import InviteScreen from './inviteScreen'; 
 
 export default class RootApp extends React.Component {
 
@@ -18,7 +19,8 @@ export default class RootApp extends React.Component {
         Register: RegisterScreen,
         NewList: NewListScreen,
         ViewList: ViewListScreen,
-        AddFood: AddFoodScreen
+        AddFood: AddFoodScreen,
+        Invite: InviteScreen 
       },
       {
         initialRouteName:'Home',
