@@ -85,7 +85,7 @@ class ListScreen extends React.Component {
                 renderSectionHeader={({ section }) =>
                     <View style={styles.rowContainer}>
                         <Text style={styles.header}>{section.title}</Text>
-                        <ButtonImage src="refresh" bgColor="#ff7f2a" width={50} height={50} action={() => {this.getLists()}}/>
+                        <ButtonImage src="refresh" bgColor="#ff7f2a" width={50} height={50} action={() => {this.getAllLists()}}/>
                         <ButtonImage src="plus" bgColor="#ff7f2a" width={50} height={50} action={() => this.props.navigation.navigate("NewList")} />
                     </View>}
                 keyExtractor={(item, index) => index}
