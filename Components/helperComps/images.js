@@ -12,6 +12,8 @@ const images = (props) => {
             return <Image source={require("../../assets/refresh.png")} style={{width: props.width, height: props.height}}/>
         case 'trash':
             return <Image source={require("../../assets/garbage_can.png")} style={{width: props.width, height: props.height}}/>
+        case 'invite':
+            return <Image source={require("../../assets/invite.png")} style={{width: props.width, height: props.height}}/>
         default:
             src = '';
             break; 

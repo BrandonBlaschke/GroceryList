@@ -135,7 +135,7 @@ class ViewListScreen extends React.Component {
                         <Text style={styles.header}>{section.title}</Text>
                         <ButtonImage src="refresh" bgColor="#ff7f2a" width={50} height={50} action={() => { this.getItems() }} />
                         <ButtonImage src="plus" bgColor="#ff7f2a" width={50} height={50} action={() => { this.props.navigation.navigate("AddFood") }} />
-                        <ButtonImage src="plus" bgColor="#ff7f2a" width={50} height={50} action={() => this.props.navigation.navigate("Invite")} />
+                        <ButtonImage src="invite" bgColor="#ff7f2a" width={50} height={50} action={() => this.props.navigation.navigate("Invite")} />
                     </View>);
                 } else {
                     return (

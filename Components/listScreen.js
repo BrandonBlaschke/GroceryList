@@ -13,36 +13,45 @@ class ListScreen extends React.Component {
         lists: [],
         dates: {}, 
         keys: {},
+        joinedLists: [],
         loading: true,
     }
 
-    //Retrieve lists from db using the email provided to sign in 
-    getLists()  {
-        let temp = link + '?orderBy="id"&equalTo="' + this.props.email + '"' 
+    getAllLists() {
+        let temp = link + '?orderBy="id"';
         axios.get(temp)
             .then(res => {
-                // console.log("-----LISTS-------");
-                // console.log(res.data);
-
+                
                 let listNames = [];
-                let listDates = {}; 
-                let listKeys = {}; 
-                let temp;
+                let listDates = [];
+                let listKeys = []; 
+                let joinedList = []; 
                 for (let key in res.data) {
-                    temp = { ...res.data[key] }
-                    listNames.push(temp.name);
+                    temp = {...res.data[key]};
+                    if (temp.id === this.props.email) {
+                        listNames.push(temp.name);
+                    }
                     listDates[temp.name] = temp.date;
                     listKeys[temp.name] = key; 
-                }
 
-                this.setState({ lists: listNames, loading: false, dates: listDates, keys: listKeys });
-            })
-            .catch(error => {
-                console.log(String(error)); 
-                Alert.alert("ERROR", String(error));
-                this.setState({ loading: false });
-            });
-    } 
+                    // Joined lists are lists that have the users email in the memebers list and 
+                    // the its not the author's list. 
+                    for (let i in temp.members) {
+                        if (temp.members[i] === this.props.email && temp.members[i] !== temp.id) {
+                            joinedList.push(temp.name);
+                        }
+                    }
+                }
+            this.setState({ lists: listNames, joinedLists: joinedList, loading: false, dates: listDates, keys: listKeys });
+            
+        })
+        .catch(error => {
+            console.log(String(error));
+            Alert.alert("ERROR", String(error));
+            this.setState({ loading: false });
+        });
+    }
+
 
     goToList(listName) {
         this.props.setListView(listName); 
@@ -51,7 +60,7 @@ class ListScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.getLists();
+        this.getAllLists();
     }
 
     render() {
@@ -59,12 +68,13 @@ class ListScreen extends React.Component {
         let lists = <Text>LOADING...</Text>
         
         if (!this.state.loading) {
-            listNames = this.state.lists
-            lists =
+            listNames = this.state.lists;
+            listJoined = this.state.joinedLists;
+            lists = 
             <SectionList
                 sections={[
                     { title: 'Your Lists', data: listNames},
-                    { title: 'Joined Lists', data: ['List 3', 'List 4'] }
+                    { title: 'Joined Lists', data: listJoined}
                 ]}
                 renderItem={({ item }) =>
                     <TouchableOpacity style={styles.rowContainer} onPress={() => {this.goToList(item)}}>
