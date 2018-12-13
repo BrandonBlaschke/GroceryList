@@ -2,6 +2,11 @@
   "name": "GroceryList",
   "version": "0.1.0",
   "private": true,
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
+  },
   "devDependencies": {
     "react-native-scripts": "1.14.0",
     "jest-expo": "~27.0.0",
@@ -23,8 +28,8 @@
     "react": "16.3.1",
     "react-native": "~0.55.2",
     "react-native-axios": "^0.17.1",
-    "react-navigation": "^2.14.2",
-    "react-redux": "^5.0.7",
-    "redux": "^4.0.0"
+    "react-navigation": "^2.18.3",
+    "react-redux": "^5.1.1",
+    "redux": "^4.0.1"
   }
 }
