@@ -127,7 +127,7 @@ class ViewListScreen extends React.Component {
                 { title: this.props.listView, data: this.state.foods },
                 { title: 'Picked Up', data: this.state.foodsOut }
             ]}
-            renderItem={({ item }) => (<ListItem name={item.name} value={item.value} quantity={item.quantity + "qt"} trash={() => this.trash(item)} response={() => this.toggleFood(item)} />)}
+            renderItem={({ item }) => (<ListItem name={item.name} value={item.value} quantity={item.quantity + "qty"} trash={() => this.trash(item)} response={() => this.toggleFood(item)} />)}
             renderSectionHeader={({ section }) => {
                 if (section.title != 'Picked Up') {
                     return (
