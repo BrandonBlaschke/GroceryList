@@ -19,6 +19,8 @@ class AddFoodScreen extends React.Component {
             name: this.state.foodName,
             value: 1,
             quantity: this.state.quantity,
+            addedBy: this.props.userName
+            
         }
 
         axios.post(link + '/' + this.props.listID + '/food.json', food)
@@ -55,7 +57,8 @@ class AddFoodScreen extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        listID: state.listID
+        listID: state.listID,
+        userName: state.name
     }
 }
 
