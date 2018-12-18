@@ -4,6 +4,7 @@ import ButtonImage from '../Components/buttonImage';
 import axios from 'react-native-axios';
 import * as actionTypes from '../store/actions';
 import { connect } from 'react-redux';
+import styles from '../ui/styles'; 
 
 const link = 'https://grocerylist-e144a.firebaseio.com/lists.json';
 
@@ -117,10 +118,10 @@ class ListScreen extends React.Component {
                             return (
                                 <View stlye={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly' }}>
                                     <TouchableOpacity style={styles.rowContainer} onPress={() => { this.goToList(item) }}>
-                                        <Text style={styles.text}>{item}</Text>
-                                        <Text style={styles.text}>-------</Text>
-                                        <Text style={styles.text}>{this.state.dates[item]}</Text>
-                                        <Text style={styles.text}>-------</Text>
+                                        <Text style={styles.textList}>{item}</Text>
+                                        <Text style={styles.textList}>-------</Text>
+                                        <Text style={styles.textList}>{this.state.dates[item]}</Text>
+                                        <Text style={styles.textList}>-------</Text>
                                         <ButtonImage src="trash" bgColor="#fff" width={50} height={50} action={() => this.deleteList(item)} />
                                     </TouchableOpacity>
                                 </View>);
@@ -128,9 +129,9 @@ class ListScreen extends React.Component {
                             return (
                             <View stlye={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly' }}>
                                 <TouchableOpacity style={styles.rowContainer} onPress={() => { this.goToList(item) }}>
-                                    <Text style={styles.text}>{item}</Text>
-                                    <Text style={styles.text}>------------------</Text>
-                                    <Text style={styles.text}>{this.state.dates[item]}</Text>
+                                    <Text style={styles.textList}>{item}</Text>
+                                    <Text style={styles.textList}>------------------</Text>
+                                    <Text style={styles.textList}>{this.state.dates[item]}</Text>
                                 </TouchableOpacity>
                             </View>);
                         }
@@ -156,42 +157,12 @@ class ListScreen extends React.Component {
                 />
         }
         return (
-            <View style={styles.container}>
+            <View style={styles.listContainer}>
                 {lists}
             </View>
         );
     }
 }
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        marginTop: 0
-    },
-    rowContainer: {
-        flex: 3,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 15,
-    },
-    header: {
-        flex: 1,
-        backgroundColor: '#ff7f2a',
-        color: '#fff',
-        fontSize: 40,
-        width: '100%',
-    },
-    text: {
-        color: "#ff7f2a",
-        fontSize: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 6,
-        marginBottom: 6,
-    }
-});
 
 function mapStateToProps(state) {
     return {

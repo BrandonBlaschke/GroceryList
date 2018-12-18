@@ -3,6 +3,7 @@ import {View, Text, TextInput, StyleSheet, Alert, ToastAndroid} from 'react-nati
 import axios from 'react-native-axios'; 
 import ButtonGL from '../ui/buttonGL'; 
 import {connect} from 'react-redux'; 
+import styles from '../ui/styles';
 
 const link = 'https://grocerylist-e144a.firebaseio.com/lists';
 
@@ -62,29 +63,5 @@ function mapStateToProps(state) {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: -120
-    },
-    text: {
-      color: "#ff7f2a",
-      fontSize: 20,
-    },
-    title: {
-      color: "#ff7f2a",
-      fontSize: 40,
-    },
-    textInput: {
-      width: "60%", 
-      color: "#8c8c8c",
-      justifyContent: 'center',
-      fontSize: 20, 
-      padding: 10,
-    }
-  });
 
 export default connect(mapStateToProps)(AddFoodScreen); 

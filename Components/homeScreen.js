@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, TextInput, Alert, Image } from 'react-native';
 import axios from 'react-native-axios'; 
 import ButtonGL from '../ui/buttonGL'; 
 import {connect} from 'react-redux'; 
+import styles from '../ui/styles';
 
 const signInURL = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyAMVYCMXViqpZjt5cQ_GkuKthXTWFzsRAY'
 const usersLink = 'https://grocerylist-e144a.firebaseio.com/users.json';
@@ -68,12 +69,14 @@ class HomeScreen extends React.Component {
                     keyboardType="email-address" 
                     style={styles.textInput}
                     textAlign={'center'}
+                    selectionColor={'#8c8c8c'}
                     underlineColorAndroid={'rgba(255,127,42,255)'}
                 />
                 <Text style={styles.text}>Password</Text>
                 <TextInput
                     onChangeText={(text) => {this.setState({password: text})}} 
                     secureTextEntry={true} 
+                    selectionColor={'#8c8c8c'}
                     style={styles.textInput}
                     textAlign={'center'}
                     underlineColorAndroid={'rgba(255,127,42,255)'}
@@ -92,31 +95,6 @@ class HomeScreen extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: -120
-    },
-    text: {
-      color: "#ff7f2a",
-      fontSize: 20,
-    },
-    title: {
-      color: "#ff7f2a",
-      fontSize: 40,
-    },
-    textInput: {
-      width: "60%", 
-      color: "#8c8c8c",
-      justifyContent: 'center',
-      fontSize: 20, 
-      padding: 10,
-    }
-  });
 
   function mapStateToProps(state) {
       return {

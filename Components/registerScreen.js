@@ -3,6 +3,7 @@ import {View, Text, TextInput, StyleSheet, Alert, KeyboardAvoidingView } from 'r
 import axios from 'react-native-axios';
 import ButtonGL from '../ui/buttonGL';
 import {connect} from 'react-redux'; 
+import styles from '../ui/styles'; 
 
 const signUpURL = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAMVYCMXViqpZjt5cQ_GkuKthXTWFzsRAY"
 
@@ -89,7 +90,7 @@ class RegisterSreen extends React.Component {
         }
 
         return (
-            <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={-180}>
+            <KeyboardAvoidingView style={styles.regContainer} behavior="padding" keyboardVerticalOffset={-180}>
                 <Text style={styles.text}>Name</Text>
                 <TextInput
                     onChangeText={(text) => { this.props.setName(text)}}
@@ -127,57 +128,6 @@ class RegisterSreen extends React.Component {
         );
     }
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: -80
-    },
-    text: {
-        color: "#ff7f2a",
-        fontSize: 20,
-    },
-    title: {
-        color: "#ff7f2a",
-        fontSize: 40,
-    },
-    textInput: {
-        width: "60%",
-        color: "#8c8c8c",
-        justifyContent: 'center',
-        fontSize: 20,
-        padding: 10,
-        marginBottom: 20,
-    },
-    textInputPasswordRed: {
-        width: "60%",
-        color: "#8c8c8c",
-        justifyContent: 'center',
-        fontSize: 20,
-        padding: 10,
-        marginBottom: 20,
-        borderWidth: 2,
-        borderColor: '#e02918'
-    },
-    textInputPasswordGreen: {
-        width: "60%",
-        color: "#8c8c8c",
-        justifyContent: 'center',
-        fontSize: 20,
-        padding: 10,
-        marginBottom: 20,
-        borderWidth: 2,
-        borderColor: '#17e046'
-    },
-    rowContainer: {
-        flex: 3,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-});
 
 function mapStateToProps(state) {
     return {

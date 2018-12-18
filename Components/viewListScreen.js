@@ -4,6 +4,7 @@ import axios from 'react-native-axios';
 import ButtonImage from './buttonImage';
 import ListItem from '../ui/listItem';
 import { connect } from 'react-redux';
+import styles from '../ui/styles'; 
 
 const link = 'https://grocerylist-e144a.firebaseio.com/lists';
 
@@ -162,7 +163,7 @@ class ViewListScreen extends React.Component {
         }
 
         return (
-            <View style={styles.container}>
+            <View style={styles.listContainer}>
                 {lists}
             </View>
         );
@@ -177,37 +178,5 @@ function mapStateToProps(state) {
         listId: state.listID
     }
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    rowContainer: {
-        flex: 3,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    header: {
-        flex: 1,
-        backgroundColor: '#ff7f2a',
-        color: '#fff',
-        fontSize: 40,
-        width: '100%',
-    },
-    text: {
-        color: "#ff7f2a",
-        fontSize: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 6,
-        marginBottom: 6,
-
-    },
-    title: {
-        color: "#ff7f2a",
-        fontSize: 40,
-    },
-});
 
 export default connect(mapStateToProps)(ViewListScreen); 
