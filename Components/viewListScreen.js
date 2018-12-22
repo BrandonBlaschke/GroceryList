@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SectionList, Alert, ActivityIndicator, ToastAndroid } from 'react-native';
+import { View, Text, SectionList, Alert, ActivityIndicator, ToastAndroid } from 'react-native';
 import axios from 'react-native-axios';
 import ButtonImage from './buttonImage';
 import ListItem from '../ui/listItem';
@@ -23,6 +23,7 @@ class ViewListScreen extends React.Component {
 
     getItems() {
 
+        
         this.setState({ loading: true });
         axios.get(link + '/' + this.props.listId + '.json')
             .then(res => {

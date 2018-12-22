@@ -1,5 +1,5 @@
 import React from 'react'; 
-import {View, TouchableOpacity, Alert} from 'react-native'
+import {View, TouchableOpacity} from 'react-native'
 import Images from './helperComps/images';
 
 const buttonImage = (props) => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Alert, SectionList, TouchableOpacity, ToastAndroid } from 'react-native';
+import { Text, View, Alert, SectionList, TouchableOpacity, ToastAndroid } from 'react-native';
 import ButtonImage from '../Components/buttonImage';
 import axios from 'react-native-axios';
 import * as actionTypes from '../store/actions';

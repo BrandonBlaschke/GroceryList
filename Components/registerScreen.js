@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
+import {Text, TextInput, Alert, KeyboardAvoidingView } from 'react-native';
 import axios from 'react-native-axios';
 import ButtonGL from '../ui/buttonGL';
 import {connect} from 'react-redux'; 

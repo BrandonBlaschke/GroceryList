@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, TextInput, Alert, Image } from 'react-native';
+import {Text, View, TextInput, Alert, Image, StatusBar} from 'react-native';
 import axios from 'react-native-axios'; 
 import ButtonGL from '../ui/buttonGL'; 
 import {connect} from 'react-redux'; 
@@ -61,6 +61,7 @@ class HomeScreen extends React.Component {
 
         return (
             <View style={styles.container}>
+                <StatusBar hidden />
                 <Text style={styles.title}>Grocery Lists</Text>
                 <Image source={require('../assets/logo.png')} style={{width: 150, height: 150}}/>
                 <Text style={styles.text}>Email</Text>
